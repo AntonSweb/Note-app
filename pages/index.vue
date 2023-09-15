@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <Sidebar />
   </div>
 </template>
 
@@ -10,7 +11,7 @@
 <style>
   .container {
     display: flex;
-    background: rgb(236 235 235);
+    background: #ffffff;
     height: 100vh;
   }
 </style>
