@@ -13,6 +13,8 @@ export type TNoteArgs = {
   title: string;
   text: string;
   isActive: boolean;
+  createdAt: string;
+  updatedAt?: string | null;
 };
 
 export function getAll(): Promise<Array<TNote>> {
@@ -58,7 +60,6 @@ export function add(
       if (DBAddRequest != null) {
         const result: TNote = {
           id: DBAddRequest.result,
-          createdAt: new Date().toISOString(),
           ...arg,
         };
         resolve(result);

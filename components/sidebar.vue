@@ -26,6 +26,7 @@ const addNote = async () => {
     title: "New Note",
     text: "No additioanl text",
     isActive: false,
+    createdAt: new Date().toISOString(),
   };
   const res = await Note.add(emptyNote);
   notes.value = await Note.getAll();
@@ -41,7 +42,7 @@ const openNote = (id: number) => {
 }
 
 function formatDate(d: string): string {
-  return moment(d).format("h:mm");
+  return moment(d).format("kk:mm");
 };
 </script>
 
