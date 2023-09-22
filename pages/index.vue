@@ -4,14 +4,10 @@
   </div>
 </template>
 
-<script setup lang="ts">
-  
-</script>
-
 <style>
-  .container {
-    display: flex;
-    background: #ffffff;
-    height: 100vh;
-  }
+.container {
+  display: flex;
+  background: #ffffff;
+  height: 100vh;
+}
 </style>

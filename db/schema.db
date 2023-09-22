@@ -1,0 +1,10 @@
+database NotesDB {
+  table Notes @item("Note") {
+    @autoincrement id: number;
+    @index title: string;
+    text: string;
+    isActive: boolean;
+    createdAt: string;
+    updatedAt?: string | null;
+  }
+}
