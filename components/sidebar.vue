@@ -13,8 +13,8 @@ const removeNote = async () => {
   if (!note) {
     return;
   };
-  let result = window.confirm(`Do you really want to remove?`);
-  if (!result) {
+  let isConfirm = window.confirm(`Do you really want to remove?`);
+  if (!isConfirm) {
     return;
   };
   await Note.remove(note.id);

@@ -33,7 +33,7 @@ export function getAll(): Promise<Array<TNote>> {
     DBGetAllRequest.onsuccess = () => {
       if (DBGetAllRequest != null) {
         const result: Array<TNote> = DBGetAllRequest.result;
-        resolve(result);
+        resolve(sort(result));
       } else {
         reject(successError);
       }
@@ -94,6 +94,16 @@ export function remove(
     };
   });
 };
+
+function sort(data: Array<TNote>): Array<TNote> {
+  return data.sort((a: TNote, b: TNote) => {
+    return (a.createdAt < b.createdAt)
+      ? 1
+      : ((a.createdAt > b.createdAt)
+        ? -1
+        : 0);
+  });
+}
 
 const error: Error = new Error("Unknown error occurred trying to perform operation");
 const successError: Error = new Error("Operation produced a null result");
