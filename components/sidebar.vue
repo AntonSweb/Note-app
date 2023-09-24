@@ -3,6 +3,7 @@ import { Note } from "../db/index";
 import moment from "moment";
 
 let notes: Ref<Array<Note.TNote>> = ref([]);
+let note: Ref<Note.TNote | null> = ref(null);
 
 onBeforeMount(async () => {
   notes.value = await Note.getAll();
@@ -10,30 +11,41 @@ onBeforeMount(async () => {
 
 const removeNote = async () => {
   const note = notes.value.find(n => n.isActive);
-  if (!note) {
-    return;
-  };
+  if (!note) return;
+
   let isConfirm = window.confirm(`Do you really want to remove?`);
-  if (!isConfirm) {
-    return;
-  };
+  if (!isConfirm) return;
+
   await Note.remove(note.id);
   notes.value = await Note.getAll();
 };
 
 const addNote = async () => {
-  const emptyNote: Note.TNoteArgs = {
+  const newNote: Note.TNoteArgs = {
     title: "New Note",
     text: "No additioanl text",
     isActive: false,
     createdAt: new Date().toISOString(),
   };
-  const res = await Note.add(emptyNote);
+  const res = await Note.add(newNote);
   notes.value = await Note.getAll();
   openNote(res.id);
 };
 
 const openNote = (id: number) => {
+  notes.value.forEach(n => {
+    if (n.id === id) {
+      n.isActive = true;
+      note.value = { ...n }
+    } else {
+      n.isActive = false;
+    }
+  });
+};
+
+const saveNote = async (patch: Note.TNote) => {
+  const id = await Note.put(patch);
+  notes.value = await Note.getAll();
   notes.value.forEach(
     n => n.id === id
       ? n.isActive = true
@@ -54,31 +66,29 @@ function formatDate(d: string): string {
     </div>
     <div class="notes">
       <div v-for="note in notes" :key="note.id" @click="openNote(note.id)" :class="['note', { _active: note.isActive }]">
-        <div class="title">{{ note.title }}</div>
-        <div>
-          <span class="time">{{ formatDate(note.updatedAt || note.createdAt) }}</span>
-          <span class="text">{{ note.text }}</span>
+        <div class="border">
+          <div class="title">{{ note.title }}</div>
+          <div>
+            <span class="time">{{ formatDate(note.updatedAt || note.createdAt) }}</span>
+            <span class="text">{{ note.text }}</span>
+          </div>
         </div>
       </div>
     </div>
   </div>
+  <Editor v-if="note" :data=note @save="saveNote" />
 </template>
 
 <style scoped>
 .sidebar {
   padding: 10px;
-  width: 260px;
-  border-right: 1px solid #c6c6c6;
-}
-
-.icon {
-  margin: 12px;
-  width: 14px;
-  cursor: pointer;
+  width: 25%;
+  max-width: 280px;
+  border-right: 1px solid #e5e5e5;
 }
 
 .note {
-  padding: 16px 12px;
+  padding: 0 12px;
   font-size: 14px;
   cursor: pointer;
   border-radius: 7px;
@@ -88,8 +98,14 @@ function formatDate(d: string): string {
   background-color: #ffe490;
 }
 
+.border {
+  padding: 16px 0;
+  border-bottom: 1px solid #e5e5e5;
+}
+
 .title {
   font-weight: bold;
+  margin-bottom: 4px;
 }
 
 .time {
@@ -100,44 +116,3 @@ function formatDate(d: string): string {
   color: #838280;
 }
 </style>
-
-
-
-
-<!-- // interface DataModel {
-//   notes: Array<TNoteArgs>
-// }
-
-// export default defineComponent({
-//   data(): DataModel {
-//     return {
-//       notes: [],
-//       db: {}
-//     }
-//   },
-//   async beforeMount() {
-//     const this.db = await idb.init();
-//     console.log(objectStoreNames);
-//   },
-//   methods: {
-//     formatDate(d: string): string {
-//       return `${d.getHours()}:${d.getMinutes()}`;
-//     },
-//     addNote(): void {
-//       const emptyNote: TNoteArgs = {
-//         title: "New Note",
-//         text: "No additioanl text",
-//         createdAt: new Date().toISOString(),
-//         updatedAt: new Date().toISOString()
-//       }
-//       let note = new Note(emptyNote);
-//       this.notes.push(note);
-//       this.openNote(this.notes.length - 1);
-//     },
-//     openNote(index: number): void {
-//       this.notes.forEach((n, i) => index !== i ? n.is_active = false : n.is_active = true);
-//     }
-//   }
-// })
-
-// :class="['note', { _active: note.is_active }]" -->

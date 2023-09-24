@@ -10,4 +10,9 @@
   background: #ffffff;
   height: 100vh;
 }
+.icon {
+  margin: 12px;
+  width: 14px;
+  cursor: pointer;
+}
 </style>

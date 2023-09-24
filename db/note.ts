@@ -70,6 +70,31 @@ export function add(
   });
 }
 
+export function put(
+  patch: TNote
+): Promise<number> {
+  return new Promise(async (resolve, reject) => {
+    const db = await init();
+    const tx = db.transaction("Notes", "readwrite");
+    const store = tx.objectStore('Notes');
+    const DBAddRequest: IDBRequest = store.put({ ...patch });
+    DBAddRequest.onerror = () => {
+      if (DBAddRequest != null) {
+        reject(DBAddRequest.error);
+      } else {
+        reject(error);
+      }
+    };
+    DBAddRequest.onsuccess = () => {
+      if (DBAddRequest != null) {
+        resolve(DBAddRequest.result);
+      } else {
+        reject(successError);
+      }
+    };
+  });
+}
+
 export function remove(
   id: number
 ): Promise<void> {
@@ -95,14 +120,17 @@ export function remove(
   });
 };
 
-function sort(data: Array<TNote>): Array<TNote> {
-  return data.sort((a: TNote, b: TNote) => {
-    return (a.createdAt < b.createdAt)
-      ? 1
-      : ((a.createdAt > b.createdAt)
-        ? -1
-        : 0);
-  });
+function sort(
+  data: Array<TNote>
+): Array<TNote> {
+  return data.sort(
+    (a: TNote, b: TNote) => {
+      return (a.createdAt < b.createdAt)
+        ? 1
+        : ((a.createdAt > b.createdAt)
+          ? -1
+          : 0);
+    });
 }
 
 const error: Error = new Error("Unknown error occurred trying to perform operation");
