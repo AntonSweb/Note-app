@@ -89,7 +89,6 @@ function formatDate(d: string): string {
 
 .note {
   padding: 0 12px;
-  font-size: 14px;
   cursor: pointer;
   border-radius: 7px;
 }

@@ -52,7 +52,6 @@ function formatDate(d: string): string {
 }
 
 .date {
-  font-size: 14px;
   text-align: center;
   color: #838280;
 }
@@ -63,6 +62,8 @@ function formatDate(d: string): string {
 }
 
 .textarea {
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
   height: 100%;
   width: 100%;
   border: none;
