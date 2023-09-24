@@ -12,9 +12,10 @@
   display: flex;
   font-family: 'Roboto', sans-serif;
   font-size: 13px;
-  height: 100vh;
+  min-height: 100vh;
   background: #ffffff;
 }
+
 .icon {
   margin: 12px;
   width: 14px;

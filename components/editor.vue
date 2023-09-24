@@ -2,18 +2,19 @@
 import { Note } from "../db/index";
 import moment from "moment";
 
-const { data } = defineProps({
+const props = defineProps({
   data: {
     type: Object as PropType<Note.TNote>,
     required: true
   }
 });
+const { data } = toRefs(props);
 
 const emit = defineEmits(["save"]);
 const emitSave = () => {
   emit("save", {
-    ...data,
-    text: data.text,
+    ...data.value,
+    text: data.value.text,
     isActive: false,
     updatedAt: new Date().toISOString()
   });

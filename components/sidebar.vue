@@ -3,7 +3,7 @@ import { Note } from "../db/index";
 import moment from "moment";
 
 let notes: Ref<Array<Note.TNote>> = ref([]);
-let note: Ref<Note.TNote | null> = ref(null);
+let noteToEdit: Ref<Note.TNote | null> = ref(null);
 
 onBeforeMount(async () => {
   notes.value = await Note.getAll();
@@ -18,6 +18,7 @@ const removeNote = async () => {
 
   await Note.remove(note.id);
   notes.value = await Note.getAll();
+  noteToEdit.value = null;
 };
 
 const addNote = async () => {
@@ -36,7 +37,7 @@ const openNote = (id: number) => {
   notes.value.forEach(n => {
     if (n.id === id) {
       n.isActive = true;
-      note.value = { ...n }
+      noteToEdit.value = { ...n };
     } else {
       n.isActive = false;
     }
@@ -67,7 +68,7 @@ function formatDate(d: string): string {
     <div class="notes">
       <div v-for="note in notes" :key="note.id" @click="openNote(note.id)" :class="['note', { _active: note.isActive }]">
         <div class="border">
-          <div class="title">{{ note.title }}</div>
+          <div class="title">{{ note.title }} {{ note.id }}</div>
           <div>
             <span class="time">{{ formatDate(note.updatedAt || note.createdAt) }}</span>
             <span class="text">{{ note.text }}</span>
@@ -76,7 +77,7 @@ function formatDate(d: string): string {
       </div>
     </div>
   </div>
-  <Editor v-if="note" :data=note @save="saveNote" />
+  <Editor v-if="noteToEdit" :data=noteToEdit @save="saveNote" />
 </template>
 
 <style scoped>
