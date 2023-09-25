@@ -16,18 +16,6 @@ export default function(): Promise<IDBDatabase> {
         return db.createObjectStore(storeName, options);
       }
     }
-    function createIndex(
-      store: IDBObjectStore,
-      indexName: string,
-      keyPath: ReadonlyArray<string>,
-      options: IDBIndexParameters,
-    ): void {
-      if (store.indexNames.contains(indexName)) {
-        return;
-      } else {
-        store.createIndex(indexName, keyPath, options);
-      }
-    }
     function removeUnusedIndexes(
       store: IDBObjectStore,
       indexNames: ReadonlyArray<string>,
@@ -53,8 +41,7 @@ export default function(): Promise<IDBDatabase> {
         keyPath: "id",
         autoIncrement: true
       });
-      removeUnusedIndexes(store, ["id", "title"]);
-      createIndex(store, "title", ["title"], { unique: false });
+      removeUnusedIndexes(store, ["id"]);
     };
   });
 };
