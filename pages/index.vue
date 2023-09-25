@@ -21,4 +21,29 @@
   width: 14px;
   cursor: pointer;
 }
+
+@media screen and (max-width: 400px) {
+  .sidebar {
+    padding: 5px;
+    width: 30%;
+  }
+
+  .note-content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .editor {
+    padding: 10px;
+    width: 70%;
+  }
+
+  .icon {
+    margin: 5px 10px;
+  }
+
+  .editor .date {
+    margin-top: 15px;
+  }
+}
 </style>

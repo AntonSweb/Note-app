@@ -6,6 +6,10 @@ let notes: Ref<Array<Note.TNote>> = ref([]);
 let noteToEdit: Ref<Note.TNote | null> = ref(null);
 let q: Ref<string> = ref("");
 
+onBeforeMount(async () => {
+  notes.value = await Note.getAll();
+});
+
 const filteredNotes = computed<Array<Note.TNote>>(() => {
   return notes.value.filter(
     (n: Note.TNote) => (
@@ -13,10 +17,6 @@ const filteredNotes = computed<Array<Note.TNote>>(() => {
       || n.text.toLowerCase().includes(q.value)
     )
   );
-});
-
-onBeforeMount(async () => {
-  notes.value = await Note.getAll();
 });
 
 const removeNote = async () => {
@@ -91,7 +91,7 @@ function formatDate(d: string): string {
         :class="['note', { _active: note.isActive }]">
         <div class="border">
           <div class="title">{{ note.title }}</div>
-          <div>
+          <div class="note-content">
             <span class="time">{{ formatDate(note.updatedAt || note.createdAt) }}</span>
             <span class="text">{{ truncateText(note.text) }}</span>
           </div>
@@ -122,6 +122,9 @@ function formatDate(d: string): string {
 
 .border {
   padding: 16px 0;
+}
+
+.note:not(:last-child) .border {
   border-bottom: 1px solid #e5e5e5;
 }
 

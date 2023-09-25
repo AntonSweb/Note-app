@@ -52,8 +52,8 @@ function formatDate(d: string): string {
       </div>
     </div>
     <div class="date"> {{ formatDate(data.updatedAt || data.createdAt) }} </div>
-    <div v-show="isMarked" class="textarea-wrap">
-      <div v-html="formatedTitle"></div>
+    <div v-show="isMarked" class="textarea-wrap textarea-mark">
+      <div v-html="formatedTitle" class="title"></div>
       <div v-html="formatedText"></div>
     </div>
     <div v-show="!isMarked" class="textarea-wrap">
@@ -101,21 +101,30 @@ function formatDate(d: string): string {
   color: #838280;
 }
 
+.title {
+  font-weight: bold;
+}
+
 .textarea-wrap {
-  padding: 15px 10px;
+  font-size: 14px;
+  padding: 10px;
   height: 100%;
+}
+
+.textarea-mark {
+  padding: 0px 12px;
 }
 
 .textarea {
   font-family: 'Roboto', sans-serif;
   font-size: 14px;
-  width: 100% !important;
+  width: 100%;
   border: none;
   outline: none;
 }
 
 .textarea.title {
-  font-weight: bold;
+  height: 22px;
 }
 
 .textarea.text {

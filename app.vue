@@ -9,4 +9,8 @@
 body {
   margin: 0;
 }
+
+p {
+  margin: 12px 0;
+}
 </style>
