@@ -4,6 +4,16 @@ import moment from "moment";
 
 let notes: Ref<Array<Note.TNote>> = ref([]);
 let noteToEdit: Ref<Note.TNote | null> = ref(null);
+let q: Ref<string> = ref("");
+
+const filteredNotes = computed<Array<Note.TNote>>(() => {
+  return notes.value.filter(
+    (n: Note.TNote) => (
+      n.title.toLowerCase().includes(q.value)
+      || n.text.toLowerCase().includes(q.value)
+    )
+  );
+});
 
 onBeforeMount(async () => {
   notes.value = await Note.getAll();
@@ -43,6 +53,10 @@ const saveNote = async (patch: Note.TNote) => {
   );
 }
 
+const searchNote = async (query: Ref<string>) => {
+  q.value = query.value.trim().toLowerCase();
+}
+
 const openNote = (id: number) => {
   notes.value.forEach(n => {
     if (n.id === id) {
@@ -73,7 +87,8 @@ function formatDate(d: string): string {
       <img @click="removeNote()" class="icon" src="/img/delete.png" alt="Delete note" />
     </div>
     <div class="notes">
-      <div v-for="note in notes" :key="note.id" @click="openNote(note.id)" :class="['note', { _active: note.isActive }]">
+      <div v-for="note in filteredNotes" :key="note.id" @click="openNote(note.id)"
+        :class="['note', { _active: note.isActive }]">
         <div class="border">
           <div class="title">{{ note.title }}</div>
           <div>
@@ -84,7 +99,7 @@ function formatDate(d: string): string {
       </div>
     </div>
   </div>
-  <Editor v-if="noteToEdit" :data=noteToEdit @save="saveNote" />
+  <Editor v-if="noteToEdit" :data=noteToEdit @save="saveNote" @search="searchNote" />
 </template>
 
 <style scoped>

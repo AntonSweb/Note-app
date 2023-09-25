@@ -20,7 +20,7 @@ export type TNoteArgs = {
 export function getAll(): Promise<Array<TNote>> {
   return new Promise(async (resolve, reject) => {
     const db = await init();
-    const tx = db.transaction("Notes", "readwrite");
+    const tx = db.transaction("Notes");
     const store = tx.objectStore("Notes");
     const DBGetAllRequest = store.getAll();
     DBGetAllRequest.onerror = () => {
