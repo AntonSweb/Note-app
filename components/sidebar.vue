@@ -33,6 +33,16 @@ const addNote = async () => {
   openNote(res.id);
 };
 
+const saveNote = async (patch: Note.TNote) => {
+  const id = await Note.put(patch);
+  notes.value = await Note.getAll();
+  notes.value.forEach(
+    n => n.id === id
+      ? n.isActive = true
+      : n.isActive = false
+  );
+}
+
 const openNote = (id: number) => {
   notes.value.forEach(n => {
     if (n.id === id) {
@@ -44,14 +54,11 @@ const openNote = (id: number) => {
   });
 };
 
-const saveNote = async (patch: Note.TNote) => {
-  const id = await Note.put(patch);
-  notes.value = await Note.getAll();
-  notes.value.forEach(
-    n => n.id === id
-      ? n.isActive = true
-      : n.isActive = false
-  );
+function truncateText(text: string): string {
+  const maxLength = 22;
+  return text.length <= maxLength
+    ? text
+    : `${text.substring(0, maxLength)}...`
 }
 
 function formatDate(d: string): string {
@@ -68,10 +75,10 @@ function formatDate(d: string): string {
     <div class="notes">
       <div v-for="note in notes" :key="note.id" @click="openNote(note.id)" :class="['note', { _active: note.isActive }]">
         <div class="border">
-          <div class="title">{{ note.title }} {{ note.id }}</div>
+          <div class="title">{{ note.title }}</div>
           <div>
             <span class="time">{{ formatDate(note.updatedAt || note.createdAt) }}</span>
-            <span class="text">{{ note.text }}</span>
+            <span class="text">{{ truncateText(note.text) }}</span>
           </div>
         </div>
       </div>

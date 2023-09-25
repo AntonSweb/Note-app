@@ -11,9 +11,10 @@ const props = defineProps({
 const { data } = toRefs(props);
 
 const emit = defineEmits(["save"]);
-const emitSave = () => {
+const emitPatch = () => {
   emit("save", {
     ...data.value,
+    title: data.value.title,
     text: data.value.text,
     isActive: false,
     updatedAt: new Date().toISOString()
@@ -35,8 +36,8 @@ function formatDate(d: string): string {
       {{ formatDate(data.updatedAt || data.createdAt) }}
     </div>
     <div class="textarea-wrap">
-      <textarea v-model="data.text" @input="emitSave()" class="textarea">
-      </textarea>
+      <textarea v-model="data.title" @input="emitPatch()" class="textarea title"></textarea>
+      <textarea v-model="data.text" @input="emitPatch()" class="textarea text"></textarea>
     </div>
   </div>
 </template>
@@ -65,9 +66,16 @@ function formatDate(d: string): string {
 .textarea {
   font-family: 'Roboto', sans-serif;
   font-size: 14px;
-  height: 100%;
-  width: 100%;
+  width: 100% !important;
   border: none;
   outline: none;
+}
+
+.textarea.title {
+  font-weight: bold;
+}
+
+.textarea.text {
+  height: 100%;
 }
 </style>

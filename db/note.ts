@@ -125,11 +125,19 @@ function sort(
 ): Array<TNote> {
   return data.sort(
     (a: TNote, b: TNote) => {
-      return (a.createdAt < b.createdAt)
-        ? 1
-        : ((a.createdAt > b.createdAt)
-          ? -1
-          : 0);
+      if (a.updatedAt && b.updatedAt) {
+        return (a.updatedAt < b.updatedAt)
+          ? 1
+          : ((a.updatedAt > b.updatedAt)
+            ? -1
+            : 0);
+      } else {
+        return (a.createdAt < b.createdAt)
+          ? 1
+          : ((a.createdAt > b.createdAt)
+            ? -1
+            : 0);
+      }
     });
 }
 
