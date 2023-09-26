@@ -1,4 +1,9 @@
-# Nuxt 3 Minimal Starter
+# Note app where you can save, view and edit your notes
+```
+use Indexed DB for data storage
+```
+
+## Nuxt 3 Minimal Starter
 
 Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
 
